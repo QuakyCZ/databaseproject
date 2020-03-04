@@ -1,0 +1,33 @@
+{block content}
+<div id="banner">
+	<h1 n:block=title>Table content:</h1>
+</div>
+
+<div id="content">
+	{snippet table}
+	<table>		
+		<tr>
+			<td><a n:href="onSort!, name" class="ajax">Name</a></td>
+			<th><a n:href="onSort!, telnum" class="ajax">Tel</a></th>
+			<th>Table actions</th>
+		</tr>
+		{foreach $rows as $row}
+
+		<tr n:snippet="row-$row->id" class="ajax">
+			<td>{$row->name}</td>
+			<th>{$row->telnum}</th>
+			<th><a n:href='update!, $row->id' class="ajax">Update</a> <a n:href='delete!, $row->id' class="ajax">Delete</a></th>
+		</tr>
+		{/foreach}
+		<tr>
+			<form n:name="addForm">
+				<td><input n:name="name"></td>
+				<th><input n:name="tel"></th>
+				<th><input n:name="add"></th>
+			</form>
+		</tr>
+	</table>
+	{/snippet}
+</div>
+
+

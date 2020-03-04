@@ -1,0 +1,124 @@
+{
+  "_args": [
+    [
+      "naja",
+      "/opt/lampp/htdocs/databaseproject"
+    ]
+  ],
+  "_from": "naja@latest",
+  "_hasShrinkwrap": false,
+  "_id": "naja@1.7.0",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/naja",
+  "_nodeVersion": "12.10.0",
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages",
+    "tmp": "tmp/naja_1.7.0_1572632964491_0.17057507987608322"
+  },
+  "_npmUser": {
+    "email": "me@jiripudil.cz",
+    "name": "jiripudil"
+  },
+  "_npmVersion": "6.11.3",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "naja",
+    "raw": "naja",
+    "rawSpec": "",
+    "scope": null,
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/naja/-/naja-1.7.0.tgz",
+  "_shasum": "ef53a784bc3638b08e485b10f4451b268b3f90bb",
+  "_shrinkwrap": null,
+  "_spec": "naja",
+  "_where": "/opt/lampp/htdocs/databaseproject",
+  "author": {
+    "name": "Jiří Pudil"
+  },
+  "bugs": {
+    "url": "https://github.com/jiripudil/Naja/issues"
+  },
+  "dependencies": {
+    "event-target-shim": "^2.0.0",
+    "object-assign": "^4.1.0",
+    "qwest": "^4.4.5"
+  },
+  "description": "Modern AJAX library for Nette Framework",
+  "devDependencies": {
+    "babel-core": "^6.14.0",
+    "babel-eslint": "^7.1.1",
+    "babel-loader": "^7.1.0",
+    "babel-plugin-syntax-class-properties": "^6.13.0",
+    "babel-plugin-transform-class-properties": "^6.14.0",
+    "babel-polyfill": "^6.16.0",
+    "babel-preset-env": "^1.6.0",
+    "babel-register": "^6.16.3",
+    "chai": "^4.0.2",
+    "codecov": "^2.1.0",
+    "eslint": "^4.1.1",
+    "istanbul-instrumenter-loader": "^3.0.0",
+    "jsdom": "^11.0.0",
+    "jsdom-global": "^3.0.2",
+    "karma": "^1.7.1",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-coverage": "^1.1.1",
+    "karma-coverage-istanbul-reporter": "^1.3.0",
+    "karma-firefox-launcher": "^1.0.1",
+    "karma-mocha": "^1.3.0",
+    "karma-safari-launcher": "^1.0.0",
+    "karma-sauce-launcher": "^1.2.0",
+    "karma-sourcemap-loader": "^0.3.7",
+    "karma-webpack": "^2.0.4",
+    "mocha": "^3.1.2",
+    "nette-forms": "^2.4.2",
+    "path": "^0.12.0",
+    "sinon": "^2.3.5",
+    "webpack": "^3.0.0",
+    "webpack-dev-server": "^2.5.0"
+  },
+  "directories": {},
+  "dist": {
+    "fileCount": 36,
+    "integrity": "sha512-dVeK26mWXJpC76ukIRkXDqL4TT6jEu8HNpXElYJnZNz0dXGts8jL4YJqpSQ89PxIh98riY4WxKpeMpBvPqWITA==",
+    "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJdvHmFCRA9TVsSAnZWagAAyuwP/A89NK8zLboYAdA0vavD\n2tArpawIVFFPr0tLa56nfNN3r2coPA++vaR/8mSy0gHsRXY9s4xeLlpHYX4s\nlG/2b20de1Cg/LRH2Fe4CPv8WYbczu2iphWwPvvG9i7yl1Ix9dFpjFjNnOx+\nqTMaysFNV31G2ILMzyxqMF+OsPjtGdmbkUHe4lKylt3IreCUKwt6PgVN06/S\n8rhR6ikg6XqIRlqcTptvrE4Fa/YWkKOQSWcZ4LnXJ0NQQru5iRaTZtSNeCc9\n+vQltsWByF5oJo83re0vktETryrWY13p2uGphAwF3npeY3NLjcDiheqdOzMe\nxnDguc3PuEhmxAzWsryQovWRQZvgEjQ56Yl1rEXLZnj4m3W52yF8UIVxKdnS\nAG8LMSOKlX8GMrgNcsMWmxII5LPTA6YZ2M2KG72sitO3q1sB+t6bUJwu1mO+\n8pNzqWJyRe2KJQRiB7vZ91uMLPfn6atBobnGjWqe1PlMyRXLM7Pp7UdNS5Pz\ndtDhulvXFUW54dquJkf5W6ye77UTs+YxHCY5KYlfUW2aRdZHK+6iOAUDNamp\nCcrWXEDnoq+H+ZyW30Bj2IxLw45jHXJJqhZ0cP8SSstIoYQfEkWsvqZI3F4V\ncTsoigPSItoLh41R3r2G02CEaaVU5vtvgq6KQjx5e3OsUPkXTCcJUiNSKtew\nrTBf\r\n=ZKEF\r\n-----END PGP SIGNATURE-----\r\n",
+    "shasum": "ef53a784bc3638b08e485b10f4451b268b3f90bb",
+    "tarball": "https://registry.npmjs.org/naja/-/naja-1.7.0.tgz",
+    "unpackedSize": 743222
+  },
+  "gitHead": "771e8f3ff3a03b51f4ae2f3899d5674f1c710f1c",
+  "homepage": "https://github.com/jiripudil/Naja#readme",
+  "keywords": [
+    "ajax",
+    "history",
+    "nette"
+  ],
+  "license": "MIT",
+  "main": "dist/Naja.js",
+  "maintainers": [
+    {
+      "name": "jiripudil",
+      "email": "me@jiripudil.cz"
+    }
+  ],
+  "name": "naja",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jiripudil/Naja.git"
+  },
+  "scripts": {
+    "build": "NODE_ENV=production webpack --config webpack.config.js",
+    "coverage": "karma start karma.sauce.coverage.js && codecov",
+    "lint": "eslint src",
+    "test": "karma start karma.sauce.test.js",
+    "test-local": "karma start karma.conf.js"
+  },
+  "version": "1.7.0"
+}
