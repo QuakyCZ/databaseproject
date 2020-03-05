@@ -2,10 +2,61 @@
 
 {block content}
 <div class="container">
-	{snippet table}
-		<table class="table">
-
+		<table n:snippet="table" class="table">
 			<thead class="thead-dark">
+				<tr>
+				<th scope="col"><a n:href='order!, "id"'>#</a></th>
+				<th scope="col"><a n:href='order!, "name"'>Name</a></th>
+				<th scope="col">Tel</th>
+				<th scope="col">Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				{var $i = 1}
+					{foreach $people as $row}
+							{if isset($updateId)}
+								{if $row->id==$updateId}
+									<tr>
+										<form n:name='updateForm'>
+											<td scope="row"><input n:name='id' value={$row->id} class="form-control" readonly></td>
+											<td><input n:name='name' value={$row->name} class="form-control"></td>
+											<td><input n:name='tel' value={$row->telnum} class="form-control"></td>
+											<td><input n:name='submit' class="btn btn-warning"></td>
+										</form>
+									</tr>
+								{else}
+									<tr>
+										<td scope="row">{$i}</td>
+										<td>{$row->name}</td>
+										<td>{$row->telnum}</td>
+										<td>
+											<a n:href='update!, $row->id' class="btn btn-warning">Update</a>
+											<a n:href='delete!, $row->id' class="btn btn-danger">Delete</a>
+										</td>
+									</tr>
+								{/if}
+							{else}
+							<tr>
+								<td scope="row">{$i}</td>
+								<td>{$row->name}</td>
+								<td>{$row->telnum}</td>
+								<td>	
+									<a n:href='update!, $row->id' class="btn btn-warning">Update</a>
+									<a n:href='delete!, $row->id' class="btn btn-danger">Delete</a>
+								</td>
+							</tr>
+							{/if}
+						
+						{var $i=$i+1}
+					{/foreach}
+			</tbody>
+		</table>
+
+
+
+
+		<table class="table">
+			<thead class="thead-dark" hidden>
 				<tr>
 				<th scope="col">#</th>
 				<th scope="col">Name</th>
@@ -13,33 +64,27 @@
 				<th scope="col">Action</th>
 				</tr>
 			</thead>
-			{var $i = 1}
-			{foreach $people as $row}
-				<tr>
-					<td>{$i}</td>
-					<td>{$row->name}</td>
-					<td>{$row->telnum}</td>
-					<td><a n:href='delete!, $row->id' class="btn btn-danger">Delete</a></td>
-				</tr>
-				{var $i=$i+1}
-			{/foreach}
-			
-			{snippet form}
-				{form addForm}
-					<tr>					
-						<td>*</td>
-						<td><input n:name="name" class="form-control" placeholder='Name'></td>
-						<td><input n:name="tel" class="form-control" placeholder='Tel'></td>
-						<td><input n:name="submit" class="btn btn-info"></td>				
-					</tr>
-					<tr n:foreach="$form->errors as $error">
-						<th>ERROR</th>		
-						<td><div class="alert alert-danger">{$error}</div></td>
-					</tr>
-				{/form}
-			{/snippet}
+			<tbody>
+				<form n:name='addForm'>
+						<tr>					
+							<td>*</td>
+							<td><input n:name="name" class="form-control" placeholder='Name'></td>
+							<td><input n:name="tel" class="form-control" placeholder='Tel'></td>
+							<td><input n:name="submit" class="btn btn-info ajax"></td>				
+						</tr>
+								
+				</form>
+			</tbody>
 		</table>
-	{/snippet}
+		{snippet a}
+			<ul>
+				{foreach $flashes as $flash}
+					
+						<li class="alert alert-danger">ERROR {$flash->message}</li>
+					
+				{/foreach}
+			</ul>
+		{/snippet}	
 </div>
 
 

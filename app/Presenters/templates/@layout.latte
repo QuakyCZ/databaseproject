@@ -14,12 +14,12 @@
 	<nav class="navbar navbar-light bg-light">
 		<h1><a n:href='Homepage:default'>Database</a></h1>
 	</nav>
-	<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
-
+	
 	{include content}
 
 	{block scripts}
 	<script src="https://nette.github.io/resources/js/3/netteForms.min.js"></script>
 	{/block}
+
 </body>
 </html>
