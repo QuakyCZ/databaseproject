@@ -1,0 +1,46 @@
+{* This is the welcome page, you can delete it *}
+
+{block content}
+<div class="container">
+	{snippet table}
+		<table class="table">
+
+			<thead class="thead-dark">
+				<tr>
+				<th scope="col">#</th>
+				<th scope="col">Name</th>
+				<th scope="col">Tel</th>
+				<th scope="col">Action</th>
+				</tr>
+			</thead>
+			{var $i = 1}
+			{foreach $people as $row}
+				<tr>
+					<td>{$i}</td>
+					<td>{$row->name}</td>
+					<td>{$row->telnum}</td>
+					<td><a n:href='delete!, $row->id' class="btn btn-danger">Delete</a></td>
+				</tr>
+				{var $i=$i+1}
+			{/foreach}
+			
+			{snippet form}
+				{form addForm}
+					<tr>					
+						<td>*</td>
+						<td><input n:name="name" class="form-control" placeholder='Name'></td>
+						<td><input n:name="tel" class="form-control" placeholder='Tel'></td>
+						<td><input n:name="submit" class="btn btn-info"></td>				
+					</tr>
+					<tr n:foreach="$form->errors as $error">
+						<th>ERROR</th>		
+						<td><div class="alert alert-danger">{$error}</div></td>
+					</tr>
+				{/form}
+			{/snippet}
+		</table>
+	{/snippet}
+</div>
+
+
+
