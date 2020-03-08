@@ -49,17 +49,10 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
 
     }
 
-    public function handleDelete(int $id)
-    {
-        $this->peopleManager->deleteRowWhere('id',strval($id));
-        
-        //$this->template->people = $this->peopleManager->getPeople();
-        if($this->isAjax()){
-            $this->redrawControl();
-            bdump('redrawed delete');
-        }
-    }
-    /*** UPDATE ***/
+    
+
+    // NEFUNKČNÍ ČÁST
+    /*** UPDATE - nefunkční tlačítko SUBMIT ***/
     public function handleUpdate(int $id,int $page):void
     {        
         bdump($id);
@@ -87,34 +80,42 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
         }
     }
 
-    /*** ORDER ***/
-
-    public function handleOrder(string $value):void
+    public function createComponentUpdateForm():Form
     {
-        bdump('handleOrder('.$value.')');
-        $order = $this->peopleManager->order($value, 'ASC');
-        bdump($order);
-        $this->template->people = $order;
-        if($this->isAjax()){
-            $this->redrawControl('table');
-        }
-        else{
-            $this->redirect("Homepage:default");
-        }
+        $form = new Form;
+        $form->addInteger('id','Id');
+        $form->addText('name','Name')->setRequired('name is required');
+        $form->addText('tel', 'Tel')->setRequired('tel is required');
+        $form->addSubmit('submit', 'Update');        
+        $form->onSuccess[] = [$this,'onUpdateFormSucceeded'];
+        return $form;
     }
 
-    
-
-    public function handlePage(int $page):void
-    {
-        bdump('Get page '.$page.'/'.$this->pages);
-        $this->people = $this->peopleManager->getPage($page,$this->pageLimit);
-        $this->page=$page;
+    public function onUpdateFormSucceeded(Form $form, \stdClass $values):void
+    { 
+        $existing = $this->peopleManager->getPeopleWhere('name',$values->name);
+        if(!isset($existing)){          
+            $this->peopleManager->update($values->id,$values->name,$values->tel);
+            $this->teplate->updateId=null;
+            $this->updateId=null;
+        }
+        else{
+            $this->flashMessage('Name exists');
+        }
         if($this->isAjax()){
             $this->redrawControl();
         }
+        else{
+            $this->redirect('Homepage:default');
+        }
+        
     }
 
+    // Konec nefunkční části
+
+
+
+    /***** AddForm *****/
     public function createComponentAddForm():Form
     {
         $form = new Form;
@@ -131,16 +132,7 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
         return $form;
     }
 
-    public function createComponentUpdateForm():Form
-    {
-        $form = new Form;
-        $form->addInteger('id','Id');
-        $form->addText('name','Name')->setRequired('name is required');
-        $form->addText('tel', 'Tel')->setRequired('tel is required');
-        $form->addSubmit('submit', 'Update');        
-        $form->onSuccess[] = [$this,'onUpdateFormSucceeded'];
-        return $form;
-    }
+   
     
     public function onAddFormValidate($form):void
     {
@@ -174,24 +166,47 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
             bdump('no ajax');
         }    
     }
+    
+    /**** Delete ****/
+    public function handleDelete(int $id)
+    {
+        $this->peopleManager->deleteRowWhere('id',strval($id));
+        
+        //$this->template->people = $this->peopleManager->getPeople();
+        if($this->isAjax()){
+            $this->redrawControl();
+            bdump('redrawed delete');
+        }
+    }
 
-    public function onUpdateFormSucceeded(Form $form, \stdClass $values):void
-    { 
-        $existing = $this->peopleManager->getPeopleWhere('name',$values->name);
-        if(!isset($existing)){          
-            $this->peopleManager->update($values->id,$values->name,$values->tel);
-            $this->teplate->updateId=null;
-            $this->updateId=null;
+    /*** ORDER ***/
+
+    public function handleOrder(string $value):void
+    {
+        bdump('handleOrder('.$value.')');
+        $order = $this->peopleManager->order($value, 'ASC');
+        bdump($order);
+        $this->template->people = $order;
+        if($this->isAjax()){
+            $this->redrawControl('table');
         }
         else{
-            $this->flashMessage('Name exists');
+            $this->redirect("Homepage:default");
         }
+    }
+
+    /**** Pagination ****/
+    public function handlePage(int $page):void
+    {
+        bdump('Get page '.$page.'/'.$this->pages);
+        $this->people = $this->peopleManager->getPage($page,$this->pageLimit);
+        $this->page=$page;
         if($this->isAjax()){
             $this->redrawControl();
         }
-        else{
-            $this->redirect('Homepage:default');
-        }
-        
     }
+
+    
+
+    
 }

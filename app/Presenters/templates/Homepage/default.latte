@@ -20,8 +20,8 @@
 					<tr n:snippet="row-$row->id">
 							{if isset($updateId)}
 								{if $row->id==$updateId}
-									{if $presenter->isAjax()}
-										<form n:name='updateForm'>
+									{if $presenter->isAjax()}									
+										<form n:name='updateForm'> <!-- tento formulář nefunguje... -->
 											<td><input n:name='id' value={$row->id} class="form-control" readonly style="width:3em;"></td>
 											<td><input n:name='name' value={$row->name} class="form-control"></td>
 											<td><input n:name='tel' value={$row->telnum} class="form-control"></td>
