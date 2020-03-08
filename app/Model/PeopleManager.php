@@ -7,7 +7,7 @@ namespace App\Model;
 use Nette;
 
 
-final class PeopleManager
+class PeopleManager
 {
     private $database;
     public function __construct(Nette\Database\Context $database)
@@ -18,6 +18,12 @@ final class PeopleManager
     public function getPeople()
     {
         return $this->database->table('people');
+    }
+
+    public function getPage(int $pageId, int $amount)
+    {
+        bdump('getPage: '.$pageId.','.$amount);
+        return $this->database->table('people')->page($pageId,$amount);
     }
 
     public function getPeopleWhere($column,$value)
@@ -49,6 +55,8 @@ final class PeopleManager
     public function order(string $column,string $method)
     {
         bdump($column.', '.$method);
-        return $this->database->table('people')->order($column.' '.$method);
+        $result = $this->database->table('people')->order($column.' '.$method);
+        bdump($result);
+        return $result;
     }
 }

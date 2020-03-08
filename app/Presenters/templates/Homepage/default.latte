@@ -2,66 +2,67 @@
 
 {block content}
 <div class="container">
+	<div class="table-responsive">
 		<table n:snippet="table" class="table">
 			<thead class="thead-dark">
 				<tr>
-				<th scope="col"><a n:href='order!, "id"'>#</a></th>
+				<th scope="col"><a n:href='order!, "id"'>ID</a></th>
 				<th scope="col"><a n:href='order!, "name"'>Name</a></th>
 				<th scope="col">Tel</th>
+				<th>Note</th>
 				<th scope="col">Action</th>
+				<th>Page: {$page}</th>
 				</tr>
 			</thead>
 			<tbody>
-				{var $i = 1}
+				{snippetArea wrapper}				
 					{foreach $people as $row}
+					<tr n:snippet="row-$row->id">
 							{if isset($updateId)}
 								{if $row->id==$updateId}
-									<tr>
+									{if $presenter->isAjax()}
 										<form n:name='updateForm'>
-											<td scope="row"><input n:name='id' value={$row->id} class="form-control" readonly></td>
+											<td><input n:name='id' value={$row->id} class="form-control" readonly style="width:3em;"></td>
 											<td><input n:name='name' value={$row->name} class="form-control"></td>
 											<td><input n:name='tel' value={$row->telnum} class="form-control"></td>
-											<td><input n:name='submit' class="btn btn-warning"></td>
+											<td></td>
+											<td><input n:name='submit' class="btn btn-warning"> <a n:href='cancelUpdate!' class="btn btn-danger">Cancel</td>
 										</form>
-									</tr>
+									
+									{/if}
 								{else}
-									<tr>
-										<td scope="row">{$i}</td>
+										<td>{$row->id}</td>
 										<td>{$row->name}</td>
 										<td>{$row->telnum}</td>
-										<td>
-											<a n:href='update!, $row->id' class="btn btn-warning">Update</a>
-											<a n:href='delete!, $row->id' class="btn btn-danger">Delete</a>
-										</td>
-									</tr>
+										<td></td>
+									
 								{/if}
 							{else}
-							<tr>
-								<td scope="row">{$i}</td>
+							
+								<td>{$row->id}</td>
 								<td>{$row->name}</td>
 								<td>{$row->telnum}</td>
+								<td></td>
 								<td>	
-									<a n:href='update!, $row->id' class="btn btn-warning">Update</a>
-									<a n:href='delete!, $row->id' class="btn btn-danger">Delete</a>
+									<a n:href='update!, $row->id, $page' class="btn btn-warning">Update</a> <a n:href='delete!, $row->id' class="btn btn-danger">Delete</a>
 								</td>
-							</tr>
+							
 							{/if}
-						
-						{var $i=$i+1}
+						</tr>
 					{/foreach}
+					
+				{/snippetArea}
 			</tbody>
 		</table>
-
-
-
 
 		<table class="table">
 			<thead class="thead-dark" hidden>
 				<tr>
-				<th scope="col">#</th>
+				<th scope="col">ID</th>
 				<th scope="col">Name</th>
 				<th scope="col">Tel</th>
 				<th scope="col">Action</th>
+				<th>Note</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -69,11 +70,24 @@
 						<tr>					
 							<td>*</td>
 							<td><input n:name="name" class="form-control" placeholder='Name'></td>
-							<td><input n:name="tel" class="form-control" placeholder='Tel'></td>
-							<td><input n:name="submit" class="btn btn-info ajax"></td>				
+							
+							<td>
+								<div class="form-row">
+									<div class="col">
+										<select n:name="code" class="form-control"></select>
+									</div>
+									<div class="col">
+										<input n:name="tel" class="form-control" placeholder='Tel'>
+									</div>
+								</div>
+							</td>
+							<td><input n:name="submit" class="btn btn-info"></td>
+							
+							<td></td>				
 						</tr>
 								
 				</form>
+				
 			</tbody>
 		</table>
 		{snippet a}
@@ -84,7 +98,34 @@
 					
 				{/foreach}
 			</ul>
+		{/snippet}
+		{snippet pagination}
+		 <nav aria-label="Page navigation example">
+			<ul class="pagination justify-content-center">		
+				{var $previous = false}
+				{var $next = false}		
+				
+					<!-- Previous -->
+					{if $page>1}
+						<li class="page-item"><a class="page-link" n:href="page!, $page-1">Previous</a></li>
+					{/if}
+					
+					<!-- Page id -->
+					{for $i=0;$i<$pages;$i++}
+						{if $page==$i+1}				
+							<li class="page-item active"><a class="page-link" n:href="page!, $i+1">{$i+1}</a></li>
+						{else}
+							<li class="page-item"><a class="page-link" n:href="page!, $i+1">{$i+1}</a></li>
+						{/if}
+					{/for}
+					<!-- Next -->
+					{if $page<$pages}
+						<li class="page-item"><a class="page-link" n:href="page!, $page+1">Next</a></li>					
+					{/if}
+			</ul>
+		</nav>
 		{/snippet}	
+	</div>
 </div>
 
 

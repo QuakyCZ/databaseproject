@@ -1,5 +1,198 @@
 [
     {
+        "name": "giggsey/libphonenumber-for-php",
+        "version": "8.11.5",
+        "version_normalized": "8.11.5.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/giggsey/libphonenumber-for-php.git",
+            "reference": "095dc721e8a090124b69005b14c1aeec93141c86"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/095dc721e8a090124b69005b14c1aeec93141c86",
+            "reference": "095dc721e8a090124b69005b14c1aeec93141c86",
+            "shasum": ""
+        },
+        "require": {
+            "ext-mbstring": "*",
+            "giggsey/locale": "^1.7",
+            "php": ">=5.3.2"
+        },
+        "require-dev": {
+            "pear/pear-core-minimal": "^1.9",
+            "pear/pear_exception": "^1.0",
+            "pear/versioncontrol_git": "^0.5",
+            "phing/phing": "^2.7",
+            "php-coveralls/php-coveralls": "^1.0|^2.0",
+            "phpunit/phpunit": "^4.8.36|^5.0",
+            "symfony/console": "^2.8|^3.0"
+        },
+        "time": "2020-03-02T09:12:35+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "8.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "libphonenumber\\": "src/"
+            },
+            "exclude-from-classmap": [
+                "/src/data/",
+                "/src/carrier/data/",
+                "/src/geocoding/data/",
+                "/src/timezone/data/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "Apache-2.0"
+        ],
+        "authors": [
+            {
+                "name": "Joshua Gigg",
+                "email": "giggsey@gmail.com",
+                "homepage": "https://giggsey.com/"
+            }
+        ],
+        "description": "PHP Port of Google's libphonenumber",
+        "homepage": "https://github.com/giggsey/libphonenumber-for-php",
+        "keywords": [
+            "geocoding",
+            "geolocation",
+            "libphonenumber",
+            "mobile",
+            "phonenumber",
+            "validation"
+        ]
+    },
+    {
+        "name": "giggsey/locale",
+        "version": "1.8",
+        "version_normalized": "1.8.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/giggsey/Locale.git",
+            "reference": "85a1b251bad11c986fec2a051b10d4b80a5caa1b"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/giggsey/Locale/zipball/85a1b251bad11c986fec2a051b10d4b80a5caa1b",
+            "reference": "85a1b251bad11c986fec2a051b10d4b80a5caa1b",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.2"
+        },
+        "require-dev": {
+            "pear/pear-core-minimal": "^1.9",
+            "pear/pear_exception": "^1.0",
+            "pear/versioncontrol_git": "^0.5",
+            "phing/phing": "~2.7",
+            "php-coveralls/php-coveralls": "^1.0|^2.0",
+            "phpunit/phpunit": "^4.8|^5.0",
+            "symfony/console": "^2.8|^3.0|^4.0",
+            "symfony/filesystem": "^2.8|^3.0|^4.0",
+            "symfony/finder": "^2.8|^3.0|^4.0",
+            "symfony/process": "^2.8|^3.0|^4.0"
+        },
+        "time": "2019-10-09T18:53:14+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Giggsey\\Locale\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Joshua Gigg",
+                "email": "giggsey@gmail.com",
+                "homepage": "http://giggsey.com/"
+            }
+        ],
+        "description": "Locale functions required by libphonenumber-for-php"
+    },
+    {
+        "name": "ipub/phone",
+        "version": "v2.2.1",
+        "version_normalized": "2.2.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/ipublikuj/phone.git",
+            "reference": "b76037bf1b9152a9c1f8dce6d5d7e59c7fc21b93"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/ipublikuj/phone/zipball/b76037bf1b9152a9c1f8dce6d5d7e59c7fc21b93",
+            "reference": "b76037bf1b9152a9c1f8dce6d5d7e59c7fc21b93",
+            "shasum": ""
+        },
+        "require": {
+            "ext-ctype": "*",
+            "ext-intl": "*",
+            "giggsey/libphonenumber-for-php": "~8.11",
+            "nette/di": "~3.0",
+            "nette/utils": "~3.0",
+            "php": ">=7.3.0"
+        },
+        "require-dev": {
+            "nette/bootstrap": "~3.0",
+            "nette/mail": "~3.0",
+            "nette/robot-loader": "~3.0",
+            "nette/safe-stream": "~2.3",
+            "nette/tester": "~2.3",
+            "pds/skeleton": "~1.0",
+            "tracy/tracy": "~2.4"
+        },
+        "suggest": {
+            "ipub/phone-ui": "If you wanna use template helpers & form validation."
+        },
+        "time": "2020-02-14T15:23:12+00:00",
+        "type": "library",
+        "extra": {
+            "ipub": {
+                "configuration": {
+                    "extension": "IPub\\Phone\\DI\\PhoneExtension"
+                }
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "IPub\\Phone\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0",
+            "GPL-3.0"
+        ],
+        "authors": [
+            {
+                "name": "iPublikuj:cms",
+                "email": "info@ipublikuj.eu",
+                "homepage": "http://www.ipublikuj.eu/"
+            }
+        ],
+        "description": "Phone helper & validator for Nette Framework",
+        "homepage": "https://github.com/ipublikuj/phone",
+        "keywords": [
+            "ipub",
+            "ipublikuj",
+            "nette",
+            "phone",
+            "tools"
+        ]
+    },
+    {
         "name": "latte/latte",
         "version": "v2.6.1",
         "version_normalized": "2.6.1.0",
@@ -1248,17 +1441,17 @@
     },
     {
         "name": "nette/utils",
-        "version": "v3.1.0",
-        "version_normalized": "3.1.0.0",
+        "version": "v3.1.1",
+        "version_normalized": "3.1.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/nette/utils.git",
-            "reference": "d6cd63d77dd9a85c3a2fae707e1255e44c2bc182"
+            "reference": "2c17d16d8887579ae1c0898ff94a3668997fd3eb"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/nette/utils/zipball/d6cd63d77dd9a85c3a2fae707e1255e44c2bc182",
-            "reference": "d6cd63d77dd9a85c3a2fae707e1255e44c2bc182",
+            "url": "https://api.github.com/repos/nette/utils/zipball/2c17d16d8887579ae1c0898ff94a3668997fd3eb",
+            "reference": "2c17d16d8887579ae1c0898ff94a3668997fd3eb",
             "shasum": ""
         },
         "require": {
@@ -1278,7 +1471,7 @@
             "ext-tokenizer": "to use Nette\\Utils\\Reflection::getUseStatements()",
             "ext-xml": "to use Strings::length() etc. when mbstring is not available"
         },
-        "time": "2020-01-03T18:13:31+00:00",
+        "time": "2020-02-09T14:10:55+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -1294,8 +1487,8 @@
         "notification-url": "https://packagist.org/downloads/",
         "license": [
             "BSD-3-Clause",
-            "GPL-2.0",
-            "GPL-3.0"
+            "GPL-2.0-only",
+            "GPL-3.0-only"
         ],
         "authors": [
             {
