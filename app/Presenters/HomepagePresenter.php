@@ -7,6 +7,7 @@ namespace App\Presenters;
 use Nette;
 use App\Model\PeopleManager;
 use Nette\Application\UI\Form;
+use Nette\Application\UI\Multiplier;
 use Nette\Utils\FileSystem;
 
 final class HomepagePresenter extends Nette\Application\UI\Presenter
@@ -63,8 +64,8 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
         
         $this->addComponent($this->createComponentUpdateForm(), 'updateForm');
         if($this->isAjax()){
-            $this->redrawControl();
-            $this->removeComponent($this->getComponent('updateForm'));
+            $this->redrawControl('table');
+            //$this->removeComponent($this->getComponent('updateForm'));
         }
         else{
             $this->redirect("Homepage:default");
@@ -80,15 +81,20 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
         }
     }
 
-    public function createComponentUpdateForm():Form
+    public function createComponentUpdateForm():Multiplier
     {
-        $form = new Form;
-        $form->addInteger('id','Id');
-        $form->addText('name','Name')->setRequired('name is required');
-        $form->addText('tel', 'Tel')->setRequired('tel is required');
-        $form->addSubmit('submit', 'Update');        
-        $form->onSuccess[] = [$this,'onUpdateFormSucceeded'];
-        return $form;
+        return new Multiplier(function($itemId){
+
+            $form = new Form;
+            $form->addInteger('id','Id');
+            $form->addText('name','Name')->setRequired('name is required');
+            $form->addText('tel', 'Tel')->setRequired('tel is required');
+            $form->addSubmit('submit', 'Update');        
+            $form->onSuccess[] = [$this,'onUpdateFormSucceeded'];
+            bdump($form);
+            return $form;
+        });
+        
     }
 
     public function onUpdateFormSucceeded(Form $form, \stdClass $values):void
@@ -129,6 +135,7 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
         $form->addSubmit('submit', 'Add');
         $form->onValidate[] = [$this, 'onAddFormValidate'];
         $form->onSuccess[] = [$this,'onAddFormSucceeded'];
+        bdump($form);
         return $form;
     }
 
