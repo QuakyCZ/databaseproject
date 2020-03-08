@@ -1,5 +1,3 @@
-{* This is the welcome page, you can delete it *}
-
 {block content}
 <div class="container">
 	<div class="table-responsive">
@@ -17,23 +15,28 @@
 			<tbody>
 				{snippetArea wrapper}				
 					{foreach $people as $row}
-						<tr>
+						
 							{if isset($updateId)}
 								{if $row->id==$updateId}							
 										<form n:name='updateForm-0' class='form'>
+										<tr>
 											<td><input n:name='id' value={$row->id} class="form-control" readonly></td>
 											<td><input n:name='name' value={$row->name} class="form-control"></td>
 											<td><input n:name='tel' value={$row->telnum} class="form-control"></td>
 											<td></td>
 											<td><input n:name='submit' class="btn btn-warning"> <a n:href='cancelUpdate!' class="btn btn-danger">Cancel</a></td>
+										</tr>								
 										</form>
 								{else}
+									<tr>
 										<td>{$row->id}</td>
 										<td>{$row->name}</td>
 										<td>{$row->telnum}</td>
-										<td></td>									
+										<td></td>		
+									</tr>							
 								{/if}
-							{else}							
+							{else}		
+								<tr>					
 								<td>{$row->id}</td>
 								<td>{$row->name}</td>
 								<td>{$row->telnum}</td>
@@ -41,9 +44,9 @@
 								<td>	
 									<a n:href='update!, $row->id, $page' class="btn btn-warning">Update</a> <a n:href='delete!, $row->id' class="btn btn-danger">Delete</a>
 								</td>
-							
+								</tr>
 							{/if}
-						</tr>
+						
 					{/foreach}					
 				{/snippetArea}
 			</tbody>
