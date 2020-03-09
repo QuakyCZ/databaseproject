@@ -12,43 +12,18 @@
 				<th>Page: {$page}</th>
 				</tr>
 			</thead>
-			<tbody>
-				{snippetArea wrapper}				
-					{foreach $people as $row}
-						
-							{if isset($updateId)}
-								{if $row->id==$updateId}							
-										<form n:name='updateForm-0' class='form'>
-										<tr>
-											<td><input n:name='id' value={$row->id} class="form-control" readonly></td>
-											<td><input n:name='name' value={$row->name} class="form-control"></td>
-											<td><input n:name='tel' value={$row->telnum} class="form-control"></td>
-											<td></td>
-											<td><input n:name='submit' class="btn btn-warning"> <a n:href='cancelUpdate!' class="btn btn-danger">Cancel</a></td>
-										</tr>								
-										</form>
-								{else}
-									<tr>
-										<td>{$row->id}</td>
-										<td>{$row->name}</td>
-										<td>{$row->telnum}</td>
-										<td></td>		
-									</tr>							
-								{/if}
-							{else}		
-								<tr>					
-								<td>{$row->id}</td>
-								<td>{$row->name}</td>
-								<td>{$row->telnum}</td>
-								<td></td>
-								<td>	
-									<a n:href='update!, $row->id, $page' class="btn btn-warning">Update</a> <a n:href='delete!, $row->id' class="btn btn-danger">Delete</a>
-								</td>
-								</tr>
-							{/if}
-						
-					{/foreach}					
-				{/snippetArea}
+			<tbody>			
+				{foreach $people as $row}		
+					<tr n:snippet='row-$row->id'>					
+						<td>{$row->id}</td>
+						<td>{$row->name}</td>
+						<td>{$row->telnum}</td>
+						<td></td>
+						<td>	
+							<a n:href='update!, $row->id' class="btn btn-warning">Update</a> <a n:href='delete!, $row->id' class="btn btn-danger">Delete</a>
+						</td>
+					</tr>	
+				{/foreach}
 			</tbody>
 		</table>
 
@@ -87,6 +62,29 @@
 				
 			</tbody>
 		</table>
+		</div>
+		{snippet updateForm}
+			{if $updateId != null}
+				<form n:name='updateForm-$updateId'>
+					<div class='row'>
+						Update:
+						<div class='col'>
+							<input n:name='id' class='form-control' readonly>
+						</div>
+						<div class='col'>
+							<input n:name='name' class='form-control'>
+						</div>
+						<div class='col'>
+							<input n:name='tel' class='form-control'>
+						</div>
+						<div class='col'>
+							<input n:name='submit' class='btn btn-warning'>
+							<a n:href='cancelUpdate!' class='btn btn-danger'>Cancel</a>
+						</div>
+					</div>
+				</form>
+			{/if}
+		{/snippet}
 		{snippet a}
 			<ul>
 				{foreach $flashes as $flash}
@@ -122,7 +120,7 @@
 			</ul>
 		</nav>
 		{/snippet}	
-	</div>
+	
 </div>
 
 

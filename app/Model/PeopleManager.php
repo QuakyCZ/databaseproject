@@ -26,9 +26,10 @@ class PeopleManager
         return $this->database->table('people')->page($pageId,$amount);
     }
 
-    public function getPeopleWhere($column,$value)
+    public function getPeopleWhere(string $column,string $value)
     {
-        return $this->database->table('people')->where($column,$value)->fetch();
+        bdump('getPeopleWhere('.$column.','.$value.')');
+        return $this->database->query('SELECT * FROM people WHERE',[$column=>$value])->fetch();
     }
 
     public function insertRow(string $name, string $tel):void
@@ -46,7 +47,7 @@ class PeopleManager
 
     public function update(int $id, string $name, string $tel):void
     {
-        $this->database->table('people')->where('name',$name)->update([
+        $this->database->table('people')->where('id',$id)->update([
             'name'=>$name,
             'telnum'=>$tel
         ]);

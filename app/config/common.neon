@@ -16,4 +16,3 @@ services:
 	- App\Model\PeopleManager
 
 extensions:
-	phone: IPub\Phone\DI\PhoneExtension

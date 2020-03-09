@@ -45,30 +45,19 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
         $this->template->page=$this->page;
         $this->template->people = $this->people;
         $this->template->updateId=$this->updateId;
-        $this->pages = $this->template->pages = ceil($this->people->count('*')/$this->pageLimit);
+        $this->template->pages = $this->pages;
         bdump('Page: '.$this->page.'/'.$this->pages);
 
-    }
+    }    
 
-    
 
-    // NEFUNKČNÍ ČÁST
-    /*** UPDATE - nefunkční tlačítko SUBMIT ***/
-    public function handleUpdate(int $id,int $page):void
-    {        
-        bdump($id);
+    /*** UPDATE ***/
+    public function handleUpdate(int $id):void
+    {   
+        bdump('handleUpdate '.$id);
         $this->updateId=$id;
-        $this->page=$page;
-        $this->people=$this->peopleManager->getPage($page,$this->pageLimit);
-        bdump($this->updateId);
-        
-        $this->addComponent($this->createComponentUpdateForm(), 'updateForm');
         if($this->isAjax()){
-            $this->redrawControl('table');
-            //$this->removeComponent($this->getComponent('updateForm'));
-        }
-        else{
-            $this->redirect("Homepage:default");
+            $this->redrawControl('updateForm');
         }
     }
 
@@ -77,47 +66,43 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
         $this->updateId=null;
         $this->people = $this->peopleManager->getPage($this->page,$this->pageLimit);
         if($this->isAjax()){
-            $this->redrawControl('table');
+            $this->redrawControl('updateForm');
         }
     }
 
     public function createComponentUpdateForm():Multiplier
     {
-        return new Multiplier(function($itemId){
-
+        return new Multiplier(function($id){
+            bdump('createComponentUpdateForm: '.$id);
             $form = new Form;
-            $form->addInteger('id','Id');
-            $form->addText('name','Name')->setRequired('name is required');
-            $form->addText('tel', 'Tel')->setRequired('tel is required');
+            $row = $this->peopleManager->getPeopleWhere('id',$id);
+            bdump($row);
+            $form->addInteger('id','Id')->setValue($id);
+            $form->addText('name','Name')->setRequired('name is required')->setValue($row->name);
+            $form->addText('tel', 'Tel')->setRequired('tel is required')->setValue($row->telnum);
             $form->addSubmit('submit', 'Update');        
             $form->onSuccess[] = [$this,'onUpdateFormSucceeded'];
             bdump($form);
             return $form;
         });
-        
     }
 
     public function onUpdateFormSucceeded(Form $form, \stdClass $values):void
     { 
-        $existing = $this->peopleManager->getPeopleWhere('name',$values->name);
-        if(!isset($existing)){          
+        $existing = $this->peopleManager->getPeopleWhere('id',strval($values->id));
+        if(isset($existing)){          
             $this->peopleManager->update($values->id,$values->name,$values->tel);
-            $this->teplate->updateId=null;
             $this->updateId=null;
         }
-        else{
-            $this->flashMessage('Name exists');
-        }
         if($this->isAjax()){
-            $this->redrawControl();
+            $this->redrawControl('row-$values->id');
+            $this->redrawControl('updateForm');
         }
         else{
             $this->redirect('Homepage:default');
         }
         
     }
-
-    // Konec nefunkční části
 
 
 
