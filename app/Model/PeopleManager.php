@@ -68,7 +68,7 @@ class PeopleManager
 
     public function getPageOfId(int $id, int $pageLimit)
     {
-        $count = $this->database->table('people')->where('id <',$id)->count('*');
+        $count = $this->database->table('people')->where('id <=',$id)->count('*');
         bdump($count);
         return intval(ceil($count/$pageLimit));
     }

@@ -160,14 +160,49 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
     }
     
     /**** Delete ****/
-    public function handleDelete(int $id)
+    public function handleDelete(int $id, bool $delete)
     {
-        $this->peopleManager->deleteRowWhere('id',strval($id));
+        $page = $this->peopleManager->getPageOfId($id,$this->pageLimit);
+        $count = $this->peopleManager->getPagesCount($this->pageLimit);
+        if($count<$this->page){
+            $this->page=$count;
+        }
+        else{
+            $this->page=$page;
+        }
+        if($delete==true){
+            $this->peopleManager->deleteRowWhere('id',strval($id));
+            $this->template->deleteId=null;
+
+        }
+        else{            
+            $this->template->deleteId=$id;
+        }
         
+        bdump('handle delete page '.$this->page);
         //$this->template->people = $this->peopleManager->getPeople();
         if($this->isAjax()){
-            $this->redrawControl();
-            bdump('redrawed delete');
+            $this->redrawControl('table');
+        }
+    }
+
+    public function handleCancelDelete()
+    {
+        $this->template->deleteId=null;
+        if($this->isAjax()){
+            $this->redrawControl('table');
+        }
+    }
+
+    public function handleDeleteAll()
+    {
+        $this->peopleManager->getPeople()->delete();
+        $this->page=1;
+        if($this->isAjax()){
+            $this->redrawControl('table');
+        }
+        else{
+            $this->redirect('Homepage:default');
         }
     }
 
@@ -200,4 +235,6 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
             $this->redirect('Homepage:default');
         }
     }
+
+
 }
