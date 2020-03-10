@@ -60,4 +60,16 @@ class PeopleManager
         bdump($result);
         return $result;
     }
+
+    public function getPagesCount(int $pageLimit)
+    {
+        return intval(ceil($this->database->table('people')->count('*')/$pageLimit));
+    }
+
+    public function getPageOfId(int $id, int $pageLimit)
+    {
+        $count = $this->database->table('people')->where('id <',$id)->count('*');
+        bdump($count);
+        return intval(ceil($count/$pageLimit));
+    }
 }

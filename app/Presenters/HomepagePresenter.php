@@ -25,32 +25,29 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
     public function __construct(PeopleManager $peopleManager)
     {
         bdump('construct');
-        $this->peopleManager = $peopleManager;
-        if(empty($this->people)){
-            bdump('people empty');
-            $this->people=$peopleManager->getPage($this->page,$this->pageLimit);
-        }
-        $obj = json_decode(file_get_contents('Files/country-codes.json'),true);
-        $codes = (array)null;
-        $this->countryNames = json_decode(file_get_contents('Files/country-names.json'),true);
-        foreach($obj as $key=>$value){
-            array_push($codes,$this->countryNames[$key].' +'.$value);
-        }
+        $this->peopleManager = $peopleManager;        
         
-        $this->countryCodes = $codes;
+        $this->pages=$this->peopleManager->getPagesCount($this->pageLimit);
+
+        if(!isset($this->countryCodes)){
+            $obj = json_decode(file_get_contents('Files/country-codes.json'),true);
+            $codes = (array)null;
+            $this->countryNames = json_decode(file_get_contents('Files/country-names.json'),true);
+            foreach($obj as $key=>$value){
+                array_push($codes,$this->countryNames[$key].' +'.$value);
+            }
+            
+            $this->countryCodes = $codes;
+        }
     }
 
     public function renderDefault():void
     {
         $this->people=$this->peopleManager->getPage($this->page,$this->pageLimit);
+        $this->template->people=$this->people;
         $this->template->page=$this->page;
-        $this->template->people = $this->people;
+        $this->template->pages=$this->pages;
         $this->template->updateId=$this->updateId;
-        $this->pages = intval(ceil($this->peopleManager->getPeople()->count('id')/$this->pageLimit));
-    
-        $this->template->pages = $this->pages;
-        bdump('Page: '.$this->page.'/'.$this->pages);
-        bdump($this->people);
     }    
 
 
@@ -67,7 +64,7 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
     public function handleCancelUpdate():void
     {
         $this->updateId=null;
-        $this->people = $this->peopleManager->getPage($this->page,$this->pageLimit);
+        //$this->people = $this->peopleManager->getPage($this->page,$this->pageLimit);
         if($this->isAjax()){
             $this->redrawControl('updateForm');
         }
@@ -80,9 +77,9 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
             $form = new Form;
             $row = $this->peopleManager->getPeopleWhere('id',$id);
             bdump($row);
-            $form->addInteger('id','Id')->setValue($id);
-            $form->addText('name','Name')->setRequired('name is required')->setValue($row->name);
-            $form->addText('tel', 'Tel')->setRequired('tel is required')->setValue($row->telnum);
+            $form->addInteger('id','Id')->setValue($id)->setRequired();
+            $form->addText('name','Name')->setRequired('name is required')->setValue($row->name)->setRequired();
+            $form->addText('tel', 'Tel')->setRequired('tel is required')->setValue($row->telnum)->setRequired();
             $form->addSubmit('submit', 'Update');        
             $form->onSuccess[] = [$this,'onUpdateFormSucceeded'];
             bdump($form);
@@ -95,8 +92,8 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
         $existing = $this->peopleManager->getPeopleWhere('id',strval($values->id));
         if(isset($existing)){          
             $this->peopleManager->update($values->id,$values->name,$values->tel);
-            $this->people=$this->peopleManager->getPage($this->page,$this->pageLimit);
             $this->updateId=null;
+            $this->page=$this->peopleManager->getPageOfId($values->id,$this->pageLimit);
         }
         if($this->isAjax()){
             $this->redrawControl('table');
@@ -148,11 +145,10 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
             $this->flashMessage('Name exists');
             bdump('name exists');
         }
-        $people=$this->peopleManager->getPeople()->count('*');
-        $this->pages=intval(ceil($people/$this->pageLimit));
+        $this->pages=$this->peopleManager->getPagesCount($this->pageLimit);
         if($this->pages>$this->page){
             $this->page=$this->pages;
-            $this->people=$this->peopleManager->getPage($this->page,$this->pageLimit);
+            //$this->people=$this->peopleManager->getPage($this->page,$this->pageLimit);
         }
         if($this->isAjax()){
             $this->redrawControl();
@@ -194,17 +190,14 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
     /**** Pagination ****/
     public function handlePage(int $page):void
     {
-        bdump('Get page '.$page.'/'.$this->pages);    
-        $this->people=$this->peopleManager->getPage($this->page,$this->pageLimit);
+        bdump('Get page '.$page.'/'.$this->pages);
+        $this->page = $page;
         if($this->isAjax()){
             $this->redrawControl('table');
+            $this->redrawControl('pagination');
         }
         else{
             $this->redirect('Homepage:default');
         }
     }
-
-    
-
-    
 }

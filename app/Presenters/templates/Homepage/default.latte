@@ -1,68 +1,44 @@
 {block content}
-<div class="container">
-		<div n:snippet='table' class='table-responsive'>		
-			<table class="table">
-				<thead class="thead-dark">
-					<tr>
-						<th scope="col"><a n:href='order!, "id"'>ID</a></th>
-						<th scope="col"><a n:href='order!, "name"'>Name</a></th>
-						<th scope="col">Tel</th>
-						<th>Note</th>
-						<th scope="col">Action</th>
-						<th>Page: {$page}</th>
-					</tr>
-				</thead>
-				<tbody>			
-					{foreach $people as $row}		
-						<tr n:snippet='row-$row->id'>					
-							<td>{$row->id}</td>
-							<td>{$row->name}</td>
-							<td>{$row->telnum}</td>
-							<td></td>
-							<td>	
-								<a n:href='update!, $row->id' class="btn btn-warning">Update</a> <a n:href='delete!, $row->id' class="btn btn-danger">Delete</a>
-							</td>
-						</tr>	
-					{/foreach}
-				</tbody>
-			</table>
-		</div>
-	<div class='table-responsive'>
+	<div class="container">
+		{snippet table}
 		<table class="table">
-			<thead class="thead-dark" hidden>
+			<thead class="table bg-dark">
 				<tr>
-				<th scope="col">ID</th>
-				<th scope="col">Name</th>
-				<th scope="col">Tel</th>
-				<th scope="col">Action</th>
-				<th>Note</th>
+					<th>ID</th>
+					<th>Name</th>
+					<th>Phone number</th>
+					<th>Action</th>					
 				</tr>
 			</thead>
+
 			<tbody>
-				<form n:name='addForm'>
-						<tr>					
-							<td>*</td>
-							<td><input n:name="name" class="form-control" placeholder='Name'></td>
-							<td>
-								<div class="form-row">
-									<div class="col">
-										<select n:name="code" class="form-control"></select>
-									</div>
-									<div class="col">
-										<input n:name="tel" class="form-control" placeholder='Tel'>
-									</div>
-								</div>
-							</td>
-							<td><input n:name="submit" class="btn btn-info"></td>
-							
-							<td></td>				
-						</tr>
-								
-				</form>
-				
+				{foreach $people as $row}
+					<tr>
+						<td>{$row->id}</td>
+						<td>{$row->name}</td>
+						<td>{$row->telnum}</td>
+						<td>
+							<a n:href="update!, $row->id" class="btn btn-warning">Update</a>
+							<a n:href="delete!, $row->id" class="btn btn-danger">Delete</a>
+						</td>
+					</tr>
+				{/foreach}
 			</tbody>
 		</table>
-	</div>
+		{/snippet}
+		{snippet addForm}
+		<table class="table ajax">
+			<form n:name="addForm">
+				<tr>
+					<td>*</td>
+					<td><input n:name="name" class="form-control"></td>
+					<td><select n:name="code" class="form-control"></select></td>
+					<td><input n:name="tel" class="form-control"></td>
+					<td><input n:name="submit" class="btn btn-info"></td>
+				</tr>
+			</form>
+		</table>
+		{/snippet}
 		{snippet updateForm}
 			{if $updateId != null}
 				<form n:name='updateForm-$updateId'>
@@ -85,17 +61,7 @@
 				</form>
 			{/if}
 		{/snippet}
-		{snippet a}
-			<ul>
-				{foreach $flashes as $flash}
-					
-						<li class="alert alert-danger">ERROR {$flash->message}</li>
-					
-				{/foreach}
-			</ul>
-		{/snippet}
-		{snippet pagination}
-		 <nav aria-label="Page navigation example">
+		 <nav n:snippet="pagination" aria-label="Page navigation example">
 			<ul class="pagination justify-content-center">				
 				<!-- Previous -->
 				{if $page>1}
@@ -115,10 +81,6 @@
 					<li class="page-item"><a class="page-link" n:href="page!, $page+1">Next</a></li>					
 				{/if}
 			</ul>
-		</nav>
-		{/snippet}	
-	
-</div>
-
-
-
+		</nav>	
+	</div>
+{/block}
