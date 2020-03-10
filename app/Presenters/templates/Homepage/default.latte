@@ -1,32 +1,33 @@
 {block content}
 <div class="container">
-	<div class="table-responsive">
-		<table n:snippet="table" class="table">
-			<thead class="thead-dark">
-				<tr>
-				<th scope="col"><a n:href='order!, "id"'>ID</a></th>
-				<th scope="col"><a n:href='order!, "name"'>Name</a></th>
-				<th scope="col">Tel</th>
-				<th>Note</th>
-				<th scope="col">Action</th>
-				<th>Page: {$page}</th>
-				</tr>
-			</thead>
-			<tbody>			
-				{foreach $people as $row}		
-					<tr n:snippet='row-$row->id'>					
-						<td>{$row->id}</td>
-						<td>{$row->name}</td>
-						<td>{$row->telnum}</td>
-						<td></td>
-						<td>	
-							<a n:href='update!, $row->id' class="btn btn-warning">Update</a> <a n:href='delete!, $row->id' class="btn btn-danger">Delete</a>
-						</td>
-					</tr>	
-				{/foreach}
-			</tbody>
-		</table>
-
+		<div n:snippet='table' class='table-responsive'>		
+			<table class="table">
+				<thead class="thead-dark">
+					<tr>
+						<th scope="col"><a n:href='order!, "id"'>ID</a></th>
+						<th scope="col"><a n:href='order!, "name"'>Name</a></th>
+						<th scope="col">Tel</th>
+						<th>Note</th>
+						<th scope="col">Action</th>
+						<th>Page: {$page}</th>
+					</tr>
+				</thead>
+				<tbody>			
+					{foreach $people as $row}		
+						<tr n:snippet='row-$row->id'>					
+							<td>{$row->id}</td>
+							<td>{$row->name}</td>
+							<td>{$row->telnum}</td>
+							<td></td>
+							<td>	
+								<a n:href='update!, $row->id' class="btn btn-warning">Update</a> <a n:href='delete!, $row->id' class="btn btn-danger">Delete</a>
+							</td>
+						</tr>	
+					{/foreach}
+				</tbody>
+			</table>
+		</div>
+	<div class='table-responsive'>
 		<table class="table">
 			<thead class="thead-dark" hidden>
 				<tr>
@@ -42,7 +43,6 @@
 						<tr>					
 							<td>*</td>
 							<td><input n:name="name" class="form-control" placeholder='Name'></td>
-							
 							<td>
 								<div class="form-row">
 									<div class="col">
@@ -62,7 +62,7 @@
 				
 			</tbody>
 		</table>
-		</div>
+	</div>
 		{snippet updateForm}
 			{if $updateId != null}
 				<form n:name='updateForm-$updateId'>
@@ -96,27 +96,24 @@
 		{/snippet}
 		{snippet pagination}
 		 <nav aria-label="Page navigation example">
-			<ul class="pagination justify-content-center">		
-				{var $previous = false}
-				{var $next = false}		
+			<ul class="pagination justify-content-center">				
+				<!-- Previous -->
+				{if $page>1}
+					<li class="page-item"><a class="page-link" n:href="page!, $page-1">Previous</a></li>
+				{/if}
 				
-					<!-- Previous -->
-					{if $page>1}
-						<li class="page-item"><a class="page-link" n:href="page!, $page-1">Previous</a></li>
+				<!-- Page id -->
+				{for $i=0;$i<$pages;$i++}
+					{if $page==$i+1}				
+						<li class="page-item active"><a class="page-link" n:href="page!, $i+1">{$i+1}</a></li>
+					{else}
+						<li class="page-item"><a class="page-link" n:href="page!, $i+1">{$i+1}</a></li>
 					{/if}
-					
-					<!-- Page id -->
-					{for $i=0;$i<$pages;$i++}
-						{if $page==$i+1}				
-							<li class="page-item active"><a class="page-link" n:href="page!, $i+1">{$i+1}</a></li>
-						{else}
-							<li class="page-item"><a class="page-link" n:href="page!, $i+1">{$i+1}</a></li>
-						{/if}
-					{/for}
-					<!-- Next -->
-					{if $page<$pages}
-						<li class="page-item"><a class="page-link" n:href="page!, $page+1">Next</a></li>					
-					{/if}
+				{/for}
+				<!-- Next -->
+				{if $page<$pages}
+					<li class="page-item"><a class="page-link" n:href="page!, $page+1">Next</a></li>					
+				{/if}
 			</ul>
 		</nav>
 		{/snippet}	

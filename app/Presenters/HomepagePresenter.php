@@ -16,7 +16,7 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
     private $peopleManager;
     private $updateId;
     private $page=1;
-    public $pageLimit = 5;
+    private $pageLimit = 5;
     private $people;
     private $pages;
     private $countryCodes;
@@ -42,12 +42,15 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
 
     public function renderDefault():void
     {
+        $this->people=$this->peopleManager->getPage($this->page,$this->pageLimit);
         $this->template->page=$this->page;
         $this->template->people = $this->people;
         $this->template->updateId=$this->updateId;
+        $this->pages = intval(ceil($this->peopleManager->getPeople()->count('id')/$this->pageLimit));
+    
         $this->template->pages = $this->pages;
         bdump('Page: '.$this->page.'/'.$this->pages);
-
+        bdump($this->people);
     }    
 
 
@@ -92,10 +95,11 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
         $existing = $this->peopleManager->getPeopleWhere('id',strval($values->id));
         if(isset($existing)){          
             $this->peopleManager->update($values->id,$values->name,$values->tel);
+            $this->people=$this->peopleManager->getPage($this->page,$this->pageLimit);
             $this->updateId=null;
         }
         if($this->isAjax()){
-            $this->redrawControl('row-$values->id');
+            $this->redrawControl('table');
             $this->redrawControl('updateForm');
         }
         else{
@@ -190,11 +194,13 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
     /**** Pagination ****/
     public function handlePage(int $page):void
     {
-        bdump('Get page '.$page.'/'.$this->pages);
-        $this->people = $this->peopleManager->getPage($page,$this->pageLimit);
-        $this->page=$page;
+        bdump('Get page '.$page.'/'.$this->pages);    
+        $this->people=$this->peopleManager->getPage($this->page,$this->pageLimit);
         if($this->isAjax()){
-            $this->redrawControl();
+            $this->redrawControl('table');
+        }
+        else{
+            $this->redirect('Homepage:default');
         }
     }
 
