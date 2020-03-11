@@ -6,6 +6,4 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'libphonenumber\\' => array($vendorDir . '/giggsey/libphonenumber-for-php/src'),
-    'Giggsey\\Locale\\' => array($vendorDir . '/giggsey/locale/src'),
 );

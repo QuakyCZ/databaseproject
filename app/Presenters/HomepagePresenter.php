@@ -19,6 +19,7 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
     private $pageLimit = 5;
     private $people;
     private $pages;
+    private $countryCodesRaw;
     private $countryCodes;
     private $countryNames;
 
@@ -32,8 +33,10 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
         if(!isset($this->countryCodes)){
             $obj = json_decode(file_get_contents('Files/country-codes.json'),true);
             $codes = (array)null;
+            $this->countryCodesRaw=(array)null;
             $this->countryNames = json_decode(file_get_contents('Files/country-names.json'),true);
             foreach($obj as $key=>$value){
+                array_push($this->countryCodesRaw,$value);
                 array_push($codes,$this->countryNames[$key].' +'.$value);
             }
             
@@ -76,10 +79,17 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
             bdump('createComponentUpdateForm: '.$id);
             $form = new Form;
             $row = $this->peopleManager->getPeopleWhere('id',$id);
-            bdump($row);
-            $form->addInteger('id','Id')->setValue($id)->setRequired();
+            $number = explode('/', $row->telnum);
+            $number[0]=substr($number[0],1);
+            bdump(array_keys($this->countryCodesRaw,$number[0]));
+            $form->addText('id','Id')->setValue($id)
+                                    ->addRule(FORM::FLOAT);
             $form->addText('name','Name')->setRequired('name is required')->setValue($row->name)->setRequired();
-            $form->addText('tel', 'Tel')->setRequired('tel is required')->setValue($row->telnum)->setRequired();
+            $form->addSelect('code','Code: ',$this->countryCodes)
+                                ->setPrompt('Country code (choose)')
+                                ->setValue(array_keys($this->countryCodesRaw,$number[0])[0])
+                                ->setRequired('Country code is required');
+            $form->addText('tel', 'Tel')->setRequired('tel is required')->setValue($number[1])->setRequired();
             $form->addSubmit('submit', 'Update');        
             $form->onSuccess[] = [$this,'onUpdateFormSucceeded'];
             bdump($form);
@@ -89,7 +99,7 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
 
     public function onUpdateFormSucceeded(Form $form, \stdClass $values):void
     { 
-        $existing = $this->peopleManager->getPeopleWhere('id',strval($values->id));
+        $existing = $this->peopleManager->getPeopleWhere('id',strval(intval($values->id)));
         if(isset($existing)){          
             $this->peopleManager->update($values->id,$values->name,$values->tel);
             $this->updateId=null;
@@ -111,12 +121,16 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
     public function createComponentAddForm():Form
     {
         $form = new Form;
-        $form->addText('name','Name')->setRequired('name is required');        
-        $form->addSelect('code','Code: ',$this->countryCodes)->setPrompt('Country code (choose)')->setRequired('Country code is required');
-        $form->addText('tel', 'Tel')->setRequired('tel is required')
-                                    ->addCondition(FORM::MAX_LENGTH,12)
-                                    ->addCondition(FORM::MIN_LENGTH,4)
-                                    ->addRule(FORM::FLOAT);
+        $form->addText('name','Name')->addRule(FORM::MIN_LENGTH, 'Jméno musí mít alespoň 3 písmena', 3)
+                                    ->addRule(FORM::MAX_LENGTH, 'Jméno je moc dlouhé. Maximální počet znaků je 15', 15);        
+        
+        $form->addSelect('code','Code: ',$this->countryCodes)
+                        ->setPrompt('Country code (choose)')
+                        ->setRequired('Country code is required');
+        
+        $form->addText('tel', 'Tel')->addRule(FORM::FLOAT, 'Vložen špatný formát čísla')
+                                    ->addRule(FORM::MIN_LENGTH, 'Číslo musí obsahovat alespoň 4 číslice.', 4)
+                                    ->addRule(FORM::MAX_LENGTH, 'Číslo musí obsahovat maximálně 15 číslic', 15);
                                     
         $form->addSubmit('submit', 'Add');
         $form->onValidate[] = [$this, 'onAddFormValidate'];
