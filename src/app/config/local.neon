@@ -1,3 +1,4 @@
 database:
-    dsn: "mysql:host=localhost;dbname=people"
-    user: "root"
+    dsn: "mysql:host=innodb.endora.cz;dbname=people"
+    user: "people"
+    password: "People123"
