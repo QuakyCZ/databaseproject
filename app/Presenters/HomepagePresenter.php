@@ -111,9 +111,9 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
     public function createComponentAddForm():Form
     {
         $form = new Form;
-        $form->addText('name','Name')->setRequired('name is required');        
+        $form->addText('name','Name')->setRequired('Name is required');        
         $form->addSelect('code','Code: ',$this->countryCodes)->setPrompt('Country code (choose)')->setRequired('Country code is required');
-        $form->addText('tel', 'Tel')->setRequired('tel is required')
+        $form->addText('tel', 'Tel')->setRequired('Phone number is required')
                                     ->addCondition(FORM::MAX_LENGTH,12)
                                     ->addCondition(FORM::MIN_LENGTH,4)
                                     ->addRule(FORM::FLOAT);
