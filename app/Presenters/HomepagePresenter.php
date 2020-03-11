@@ -121,14 +121,6 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
     public function createComponentAddForm():Form
     {
         $form = new Form;
-<<<<<<< HEAD
-        $form->addText('name','Name')->setRequired('Name is required');        
-        $form->addSelect('code','Code: ',$this->countryCodes)->setPrompt('Country code (choose)')->setRequired('Country code is required');
-        $form->addText('tel', 'Tel')->setRequired('Phone number is required')
-                                    ->addCondition(FORM::MAX_LENGTH,12)
-                                    ->addCondition(FORM::MIN_LENGTH,4)
-                                    ->addRule(FORM::FLOAT);
-=======
         $form->addText('name','Name')->addRule(FORM::MIN_LENGTH, 'Jméno musí mít alespoň 3 písmena', 3)
                                     ->addRule(FORM::MAX_LENGTH, 'Jméno je moc dlouhé. Maximální počet znaků je 15', 15);        
         
@@ -139,7 +131,6 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
         $form->addText('tel', 'Tel')->addRule(FORM::FLOAT, 'Vložen špatný formát čísla')
                                     ->addRule(FORM::MIN_LENGTH, 'Číslo musí obsahovat alespoň 4 číslice.', 4)
                                     ->addRule(FORM::MAX_LENGTH, 'Číslo musí obsahovat maximálně 15 číslic', 15);
->>>>>>> b9040d3d221f216fc53542eaf9d04077ef9d99fc
                                     
         $form->addSubmit('submit', 'Add');
         $form->onValidate[] = [$this, 'onAddFormValidate'];
