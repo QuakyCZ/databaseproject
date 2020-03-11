@@ -15,7 +15,7 @@ class Bootstrap
 
 		$configurator->setDebugMode(TRUE); // enable for your remote IP
 		$configurator->enableTracy(__DIR__ . '/../log');
-
+if (!empty($_SERVER['DOCKER'])) { $configurator->setDebugMode(true); }
 		$configurator->setTimeZone('Europe/Prague');
 		$configurator->setTempDirectory(__DIR__ . '/../temp');
 
