@@ -1,0 +1,3 @@
+database:
+    dsn: "mysql:host=localhost;dbname=people"
+    user: "root"

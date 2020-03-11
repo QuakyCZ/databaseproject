@@ -1,0 +1,99 @@
+{block content}
+	<div class="container">
+		{snippet table}
+			<table class="table table-hover table-dark">
+				<thead class="thead-dark">
+					<tr>
+						<th>ID</th>
+						<th>Name</th>
+						<th>Phone number</th>
+						<th>Action <a n:href="deleteAll!" class="btn btn-danger">Delete All</a></th>
+					</tr>
+				</thead>
+
+				<tbody>
+					{foreach $people as $row}
+						<tr>
+							<td>{$row->id}</td>
+							<td>{$row->name}</td>
+							<td>{$row->telnum}</td>
+							<td>
+								{if isset($deleteId)}
+									{if $deleteId==$row->id}
+										<a n:href="delete!, $row->id, true" class="btn btn-warning">Delete</a>
+										<a n:href="cancelDelete!" class="btn btn-primary">Cancel</a>
+									{else}
+										<a n:href="update!, $row->id" class="btn btn-warning">Update</a>
+										<a n:href="delete!, $row->id, false" class="btn btn-primary">Delete</a>
+									{/if}
+								{else}
+									<a n:href="update!, $row->id" class="btn btn-warning">Update</a>
+									<a n:href="delete!, $row->id, false" class="btn btn-primary">Delete</a>
+								{/if}
+							</td>
+						</tr>
+					{/foreach}
+				</tbody>
+			</table>
+		{/snippet}
+		<table class="table table-dark ajax">
+			<form n:name="addForm">
+				<tr>
+					<td>*NEW*</td>
+					<td><input n:name="name" class="form-control"></td>
+					<td><select n:name="code" class="form-control"></select></td>
+					<td><input n:name="tel" class="form-control"></td>
+					<td><input n:name="submit" class="btn btn-info"></td>
+				</tr>
+			</form>
+		</table>
+		{snippet updateForm}
+			{if $updateId != null}
+				<form n:name='updateForm-$updateId'>
+					<div class='d-flex justify-content-center'>
+						<div class='row '>
+							Update:
+							<div class='col'>
+								<input n:name='id' class='form-control' readonly>
+							</div>
+							<div class='col'>
+								<input n:name='name' class='form-control'>
+							</div>
+							<div class='col'>
+								<select n:name='code' class='form-control'></select>
+							</div>
+							<div class='col'>
+								<input n:name='tel' class='form-control'>
+							</div>
+							<div class='col'>
+								<input n:name='submit' class='btn btn-warning'>
+								<a n:href='cancelUpdate!' class='btn btn-danger'>Cancel</a>
+							</div>
+						</div>
+					</div>
+				</form>
+			{/if}
+		{/snippet}
+		 <nav n:snippet="pagination" aria-label="Page navigation example">
+			<ul class="pagination justify-content-center">				
+				<!-- Previous -->
+				{if $page>1}
+					<li class="page-item"><a class="page-link" n:href="page!, $page-1">Previous</a></li>
+				{/if}
+				
+				<!-- Page id -->
+				{for $i=0;$i<$pages;$i++}
+					{if $page==$i+1}				
+						<li class="page-item active"><a class="page-link" n:href="page!, $i+1">{$i+1}</a></li>
+					{else}
+						<li class="page-item"><a class="page-link" n:href="page!, $i+1">{$i+1}</a></li>
+					{/if}
+				{/for}
+				<!-- Next -->
+				{if $page<$pages}
+					<li class="page-item"><a class="page-link" n:href="page!, $page+1">Next</a></li>					
+				{/if}
+			</ul>
+		</nav>	
+	</div>
+{/block}
