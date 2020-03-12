@@ -81,15 +81,46 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
             $row = $this->peopleManager->getPeopleWhere('id',$id);
             $number = explode('/', $row->telnum);
             $number[0]=substr($number[0],1);
+            bdump($number[0]);
             bdump(array_keys($this->countryCodesRaw,$number[0]));
-            $form->addText('id','Id')->setValue($id)
-                                    ->addRule(FORM::FLOAT);
-            $form->addText('name','Name')->setRequired('name is required')->setValue($row->name)->setRequired();
+            $form->addHidden('id')->setValue($id)->addRule(FORM::INTEGER);
+
+            //INPUT NAME
+            $form->addText('name','Name')
+                ->setValue($row->name)
+                ->addRule(
+                    FORM::MIN_LENGTH,
+                    'Jméno musí mít alespoň 3 písmena',
+                    3)
+                ->addRule(
+                    FORM::MAX_LENGTH,
+                    'Jméno je moc dlouhé. Maximální počet znaků je 15',
+                    15);
+
+            //SELECT CODE
             $form->addSelect('code','Code: ',$this->countryCodes)
                                 ->setPrompt('Country code (choose)')
                                 ->setValue(array_keys($this->countryCodesRaw,$number[0])[0])
                                 ->setRequired('Country code is required');
-            $form->addText('tel', 'Tel')->setRequired('tel is required')->setValue($number[1])->setRequired();
+
+            //INPUT TEL
+            $form->addText('tel', 'Tel')
+                ->setValue($number[1])
+                ->addRule(
+                    FORM::FLOAT,
+                    'Vložen špatný formát čísla'
+                )
+                ->addRule(
+                    FORM::MIN_LENGTH,
+                    'Číslo musí obsahovat alespoň 4 číslice.',
+                    4
+                )
+                ->addRule(
+                    FORM::MAX_LENGTH,
+                    'Číslo musí obsahovat maximálně 15 číslic',
+                    15
+                );
+            //INPUT SUBMIT
             $form->addSubmit('submit', 'Update');        
             $form->onSuccess[] = [$this,'onUpdateFormSucceeded'];
             bdump($form);
@@ -100,8 +131,10 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
     public function onUpdateFormSucceeded(Form $form, \stdClass $values):void
     { 
         $existing = $this->peopleManager->getPeopleWhere('id',strval(intval($values->id)));
-        if(isset($existing)){          
-            $this->peopleManager->update($values->id,$values->name,$values->tel);
+        if(isset($existing)){
+            $code = explode(' ', $this->countryCodes[$values->code]);
+            $number = end($code).'/'.$values->tel;
+            $this->peopleManager->update($values->id,$values->name,$number);
             $this->updateId=null;
             $this->page=$this->peopleManager->getPageOfId($values->id,$this->pageLimit);
         }
@@ -121,16 +154,35 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
     public function createComponentAddForm():Form
     {
         $form = new Form;
-        $form->addText('name','Name')->addRule(FORM::MIN_LENGTH, 'Jméno musí mít alespoň 3 písmena', 3)
-                                    ->addRule(FORM::MAX_LENGTH, 'Jméno je moc dlouhé. Maximální počet znaků je 15', 15);        
+        $form->addText('name','Name')
+            ->addRule(
+                FORM::MIN_LENGTH,
+                'Jméno musí mít alespoň 3 písmena',
+                3)
+            ->addRule(
+                FORM::MAX_LENGTH,
+                'Jméno je moc dlouhé. Maximální počet znaků je 15',
+                15);
         
         $form->addSelect('code','Code: ',$this->countryCodes)
                         ->setPrompt('Country code (choose)')
                         ->setRequired('Country code is required');
         
-        $form->addText('tel', 'Tel')->addRule(FORM::FLOAT, 'Vložen špatný formát čísla')
-                                    ->addRule(FORM::MIN_LENGTH, 'Číslo musí obsahovat alespoň 4 číslice.', 4)
-                                    ->addRule(FORM::MAX_LENGTH, 'Číslo musí obsahovat maximálně 15 číslic', 15);
+        $form->addText('tel', 'Tel')
+                                    ->addRule(
+                                        FORM::FLOAT,
+                                        'Vložen špatný formát čísla'
+                                    )
+                                    ->addRule(
+                                        FORM::MIN_LENGTH,
+                                        'Číslo musí obsahovat alespoň 4 číslice.',
+                                        4
+                                    )
+                                    ->addRule(
+                                        FORM::MAX_LENGTH,
+                                        'Číslo musí obsahovat maximálně 15 číslic',
+                                        15
+                                    );
                                     
         $form->addSubmit('submit', 'Add');
         $form->onValidate[] = [$this, 'onAddFormValidate'];
@@ -176,8 +228,10 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
     /**** Delete ****/
     public function handleDelete(int $id, bool $delete)
     {
+
         $page = $this->peopleManager->getPageOfId($id,$this->pageLimit);
         $count = $this->peopleManager->getPagesCount($this->pageLimit);
+        $this->updateId = null;
         if($count<$this->page){
             $this->page=$count;
         }
@@ -197,6 +251,7 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
         //$this->template->people = $this->peopleManager->getPeople();
         if($this->isAjax()){
             $this->redrawControl('table');
+            $this->redrawControl('updateForm');
         }
     }
 
